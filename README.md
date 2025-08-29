@@ -6,10 +6,10 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 #build
 cargo build
-
 cargo build --release
 
 #Change the permissions of ILASP
+
 chmod +x ./ILASP
 
 #run
