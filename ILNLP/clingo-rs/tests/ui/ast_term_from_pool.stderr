@@ -1,0 +1,12 @@
+error[E0505]: cannot move out of `args` because it is borrowed
+  --> tests/ui/ast_term_from_pool.rs:14:10
+   |
+9  |     let args = vec![term1, term2];
+   |         ---- binding `args` declared here
+10 |     let mut pool = ast::pool(&loc, &args).unwrap();
+   |                                    ----- borrow of `args` occurs here
+...
+14 |     drop(args);
+   |          ^^^^ move out of `args` occurs here
+15 |     let _end = (pool, term3);
+   |                 ---- borrow later used here

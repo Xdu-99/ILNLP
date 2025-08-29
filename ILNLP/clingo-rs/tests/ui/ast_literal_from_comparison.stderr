@@ -1,0 +1,15 @@
+error[E0382]: use of moved value: `comp`
+  --> tests/ui/ast_literal_from_comparison.rs:14:22
+   |
+11 |     let comp = ast::comparison(term2, &guards).unwrap();
+   |         ---- move occurs because `comp` has type `Comparison<'_>`, which does not implement the `Copy` trait
+12 |     let lit = ast::basic_literal_from_comparison(&loc, ast::Sign::NoSign, comp).unwrap();
+   |                                                                           ---- value moved here
+13 |
+14 |     let _end = (lit, comp);
+   |                      ^^^^ value used here after move
+   |
+help: consider cloning the value if the performance cost is acceptable
+   |
+12 |     let lit = ast::basic_literal_from_comparison(&loc, ast::Sign::NoSign, comp.clone()).unwrap();
+   |                                                                               ++++++++
