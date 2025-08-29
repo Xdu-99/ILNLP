@@ -1,0 +1,13 @@
+error[E0505]: cannot move out of `elements` because it is borrowed
+  --> tests/ui/ast_head_aggregate.rs:19:10
+   |
+11 |     let elements = vec![];
+   |         -------- binding `elements` declared here
+...
+16 |         &elements,
+   |         --------- borrow of `elements` occurs here
+...
+19 |     drop(elements);
+   |          ^^^^^^^^ move out of `elements` occurs here
+20 |     let _end = hagg;
+   |                ---- borrow later used here
