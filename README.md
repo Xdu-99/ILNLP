@@ -27,7 +27,6 @@ chmod +x ./ILASP
 
 Usage: ilnlp [OPTIONS] [INPUT]
 
-
 Arguments:
 
   [INPUT]  
