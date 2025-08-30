@@ -1,0 +1,12 @@
+error[E0505]: cannot move out of `elements` because it is borrowed
+  --> tests/ui/ast_disjunction.rs:23:10
+   |
+20 |     let elements = vec![cond];
+   |         -------- binding `elements` declared here
+21 |     let dis = ast::disjunction(&loc, &elements);
+   |                                      --------- borrow of `elements` occurs here
+22 |
+23 |     drop(elements);
+   |          ^^^^^^^^ move out of `elements` occurs here
+24 |     let _end = dis;
+   |                --- borrow later used here
