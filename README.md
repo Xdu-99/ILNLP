@@ -2,6 +2,7 @@ Random_Example.zip is a zipped file of tasks and results of Hamilton circuit and
 ilnlp.zip is a zipped file of source code. After decompression, enter the path "ilnlp" and follow the following steps.
 
 #install rust
+
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 #build
