@@ -23,7 +23,7 @@ fn parse_variable(input: Span) -> IResult<Span, String> {
     let identifier = recognize((
         take_while(|c: char| c == '_'),
         one_of("ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
-        take_while(|c: char| c.is_ascii_alphanumeric() || c == '_' || c == '\''),
+        take_while(|c: char| c.is_ascii_alphanumeric() || c == '_' || c == '+' || c == '-' || c == '\''),
     ));
 
     map(identifier, |s: Span| s.to_string()).parse(input)
@@ -67,13 +67,14 @@ fn parse_term(input: Span) -> IResult<Span, Literal> {
 
 fn parse_comparison(input: Span) -> IResult<Span, BodyLiteral> {
     let (input, left) = preceded(multispace0, alt((parse_variable, parse_integer))).parse(input)?;
-    let (input, op) = preceded(multispace0, alt((tag("!="), tag(">"), tag("<")))).parse(input)?;
+    let (input, op) = preceded(multispace0, alt((tag("!="), tag(">"), tag("<"), tag("=")))).parse(input)?;
     let (input, right) =
         preceded(multispace0, alt((parse_variable, parse_integer))).parse(input)?;
     let comparison = match op.trim() {
         "!=" => Comparison::NotEqual(left, right),
         ">" => Comparison::Greater(left, right),
         "<" => Comparison::Less(left, right),
+        "=" => Comparison::Equal(left, right),
         _ => unreachable!(),
     };
     Ok((input, BodyLiteral::Comparison(comparison)))

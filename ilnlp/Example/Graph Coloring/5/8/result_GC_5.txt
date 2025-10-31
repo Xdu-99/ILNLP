@@ -1,0 +1,28 @@
+noc(V1,V2) :- color(V2); v(V1); not c(V1,V2).
+c(V1,V2) :- noc(V3,V2); v(V1); not noc(V1,V2).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.111s
+%% Hypothesis Space Generation             : 0.455s
+%% Conflict analysis                       : 0.269s
+%%   - Positive Examples                   : 0.269s
+%% Counterexample search                   : 0.434s
+%%   - CDOEs                               : 0.008s
+%%   - CDPIs                               : 0.426s
+%% Hypothesis Search                       : 0.048s
+%% Total                                   : 1.329s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+===== Statistics ====
+Parse time: 6.904808ms
+Convert time: 6.783370404s
+Solve time: 1.411740997s
+Output time: 13.457774ms
+Total time: 8.215473983s
+Memory:  330.7 MiB
+ILASP CPU time: 1.411740997s
+ILASP Memory: 92.4 MiB
+Universe Size: 36 literals
+Unique Predicates: 5

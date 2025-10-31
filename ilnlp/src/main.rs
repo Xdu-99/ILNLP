@@ -1,7 +1,7 @@
 #[global_allocator]
 static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
 
-use ilnpl::{ilasp::ILTask, stat::Stat};
+use ilnlp::{ilasp::ILTask, stat::Stat};
 use std::{
     fmt::Display,
     fs::File,
@@ -192,7 +192,7 @@ impl Cli {
             }
         }
         println!("Parsing...");
-        let mut c = ilnpl::parser::parse_task(&buf)?;
+        let mut c = ilnlp::parser::parse_task(&buf)?;
         stat.lock().unwrap().parse();
         c.check_compatibility()?;
         println!("Converting...");

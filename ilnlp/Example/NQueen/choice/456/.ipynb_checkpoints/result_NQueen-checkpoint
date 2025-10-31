@@ -1,0 +1,29 @@
+ :- queen(V1,V3); queen(V2,V3); V1 != V2.
+0 {queen(V1,V2) } 1 :- row(V1); column(V2).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.454s
+%% Hypothesis Space Generation             : 1.142s
+%% Conflict analysis                       : 0.378s
+%%   - Negative Examples                   : 0.057s
+%%   - Positive Examples                   : 0.321s
+%% Counterexample search                   : 4.081s
+%%   - CDOEs                               : 0.102s
+%%   - CDPIs                               : 3.979s
+%% Hypothesis Search                       : 0.122s
+%% Total                                   : 6.186s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+===== Statistics ====
+Parse time: 730.117µs
+Convert time: 16.658293563s
+Solve time: 6.423740767s
+Output time: 50.613689ms
+Total time: 23.133378136s
+Memory:  889.6 MiB
+ILASP CPU time: 6.423740767s
+ILASP Memory: 255.5 MiB
+Universe Size: 36 literals
+Unique Predicates: 3

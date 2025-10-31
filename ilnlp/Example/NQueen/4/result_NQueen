@@ -1,0 +1,28 @@
+no_queen(V1,V2) :- row(V1); column(V2); not queen(V1,V2).
+queen(V1,V2) :- no_queen(V1,V3); column(V2); not no_queen(V1,V2).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.039s
+%% Hypothesis Space Generation             : 3.719s
+%% Conflict analysis                       : 0.426s
+%%   - Positive Examples                   : 0.426s
+%% Counterexample search                   : 0.093s
+%%   - CDOEs                               : 0.002s
+%%   - CDPIs                               : 0.091s
+%% Hypothesis Search                       : 0.048s
+%% Total                                   : 4.339s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+===== Statistics ====
+Parse time: 588.074µs
+Convert time: 100.353702667s
+Solve time: 4.456719451s
+Output time: 4.312764ms
+Total time: 104.815322956s
+Memory:  20.8 GiB
+ILASP CPU time: 4.456719451s
+ILASP Memory: 88.4 MiB
+Universe Size: 36 literals
+Unique Predicates: 5

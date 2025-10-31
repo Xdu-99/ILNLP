@@ -1,0 +1,28 @@
+nin(V1,V2) :- edge(V2,V1); not in(V1,V2).
+in(V1,V2) :- edge(V1,V2); not nin(V1,V2).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.27s
+%% Hypothesis Space Generation             : 1.172s
+%% Conflict analysis                       : 1.824s
+%%   - Positive Examples                   : 1.824s
+%% Counterexample search                   : 0.757s
+%%   - CDOEs                               : 0.013s
+%%   - CDPIs                               : 0.744s
+%% Hypothesis Search                       : 0.173s
+%% Total                                   : 4.23s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+===== Statistics ====
+Parse time: 3.813792ms
+Convert time: 201.608169498s
+Solve time: 4.373153301s
+Output time: 38.726587ms
+Total time: 206.023863178s
+Memory:  5 GiB
+ILASP CPU time: 4.373153301s
+ILASP Memory: 193.4 MiB
+Universe Size: 53 literals
+Unique Predicates: 6

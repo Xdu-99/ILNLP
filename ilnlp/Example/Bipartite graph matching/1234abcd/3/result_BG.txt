@@ -1,0 +1,30 @@
+not_match(V1,V2) :- match(V1,V3); V2 != V3; edge(V1,V2).
+not_match(V1,V2) :- match(V3,V2); V1 != V3; edge(V1,V2).
+match(V1,V2) :- edge(V1,V2); not not_match(V1,V2).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.02s
+%% Hypothesis Space Generation             : 0.166s
+%% Conflict analysis                       : 0.272s
+%%   - Negative Examples                   : 0.053s
+%%   - Positive Examples                   : 0.219s
+%% Counterexample search                   : 0.073s
+%%   - CDOEs                               : 0.005s
+%%   - CDPIs                               : 0.072s
+%% Hypothesis Search                       : 0.066s
+%% Total                                   : 0.602s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+===== Statistics ====
+Parse time: 549.421µs
+Convert time: 4.487598ms
+Solve time: 692.918683ms
+Output time: 1.270746ms
+Total time: 699.226448ms
+Memory:  14.9 MiB
+ILASP CPU time: 692.918683ms
+ILASP Memory: 25.2 MiB
+Universe Size: 15 literals
+Unique Predicates: 3

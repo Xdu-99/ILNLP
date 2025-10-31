@@ -1,0 +1,7 @@
+error: unexpected argument '--tempalte' found
+
+  tip: a similar argument exists: '--template'
+
+Usage: ilnlp --run --output <OUTPUT> --template <TEMPLATE> [INPUT]
+
+For more information, try '--help'.

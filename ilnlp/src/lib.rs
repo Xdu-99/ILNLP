@@ -83,6 +83,7 @@ pub enum Comparison {
     NotEqual(String, String),
     Greater(String, String),
     Less(String, String),
+    Equal(String, String)
 }
 
 impl std::fmt::Display for Comparison {
@@ -91,6 +92,7 @@ impl std::fmt::Display for Comparison {
             Comparison::NotEqual(left, right) => write!(f, "{} != {}", left, right),
             Comparison::Greater(left, right) => write!(f, "{} > {}", left, right),
             Comparison::Less(left, right) => write!(f, "{} < {}", left, right),
+            Comparison::Equal(left, right) => write!(f, "{} = {}", left, right),
         }
     }
 }

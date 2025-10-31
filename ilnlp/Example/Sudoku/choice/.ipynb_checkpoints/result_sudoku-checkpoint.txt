@@ -1,0 +1,29 @@
+has_number(V1,V2) :- block(V3,V1,V2).
+no_cell(V1,V2,V3) :- num(V3); has_number(V1,V2); not cell(V1,V2,V3).
+cell(V1,V2,V3) :- num(V3); has_number(V1,V2); not no_cell(V1,V2,V3).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.028s
+%% Hypothesis Space Generation             : 0.939s
+%% Conflict analysis                       : 0.065s
+%%   - Positive Examples                   : 0.065s
+%% Counterexample search                   : 0.008s
+%%   - CDOEs                               : 0.002s
+%%   - CDPIs                               : 0.006s
+%% Hypothesis Search                       : 0.011s
+%% Total                                   : 1.055s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+===== Statistics ====
+Parse time: 693.871µs
+Convert time: 120.568921644s
+Solve time: 1.190964325s
+Output time: 4.232107ms
+Total time: 121.764811947s
+Memory:  12.2 MiB
+ILASP CPU time: 1.190964325s
+ILASP Memory: 45.3 MiB
+Universe Size: 54 literals
+Unique Predicates: 7
