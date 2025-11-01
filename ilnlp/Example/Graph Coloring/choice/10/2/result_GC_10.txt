@@ -1,0 +1,27 @@
+0 {c(V1,V2) } 1 :- color(V2); v(V1).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.075s
+%% Hypothesis Space Generation             : 0.164s
+%% Conflict analysis                       : 0.195s
+%%   - Positive Examples                   : 0.195s
+%% Counterexample search                   : 0.326s
+%%   - CDOEs                               : 0.008s
+%%   - CDPIs                               : 0.319s
+%% Hypothesis Search                       : 0.021s
+%% Total                                   : 0.786s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+===== Statistics ====
+Parse time: 2.743385ms
+Convert time: 162.493363ms
+Solve time: 926.060035ms
+Output time: 5.771403ms
+Total time: 1.097068186s
+Memory:  13 MiB
+ILASP CPU time: 926.060035ms
+ILASP Memory: 65.2 MiB
+Universe Size: 25 literals
+Unique Predicates: 4

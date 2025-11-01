@@ -1,0 +1,27 @@
+0 {in(V1,V2) } 1 :- edge(V2,V1).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.148s
+%% Hypothesis Space Generation             : 0.352s
+%% Conflict analysis                       : 0.828s
+%%   - Positive Examples                   : 0.828s
+%% Counterexample search                   : 0.663s
+%%   - CDOEs                               : 0.006s
+%%   - CDPIs                               : 0.658s
+%% Hypothesis Search                       : 0.191s
+%% Total                                   : 2.202s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+===== Statistics ====
+Parse time: 2.697897ms
+Convert time: 177.555416ms
+Solve time: 2.315909638s
+Output time: 14.409081ms
+Total time: 2.510572032s
+Memory:  18.9 MiB
+ILASP CPU time: 2.315909638s
+ILASP Memory: 143 MiB
+Universe Size: 37 literals
+Unique Predicates: 5
