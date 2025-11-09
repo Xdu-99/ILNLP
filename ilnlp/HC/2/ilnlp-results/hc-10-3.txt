@@ -1,0 +1,32 @@
+Parsing...
+Converting...
+Running ILASP... 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-processing                          : 0.144s
+%% Hypothesis Space Generation             : 3.225s
+%% Conflict analysis                       : 78.407s
+%%   - Negative Examples                   : 2.873s
+%%   - Positive Examples                   : 75.534s
+%% Counterexample search                   : 1.962s
+%%   - CDOEs                               : 0.026s
+%%   - CDPIs                               : 1.936s
+%% Hypothesis Search                       : 9.379s
+%% Total                                   : 93.421s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+reach(V1) :- in(V1,V2); not in(V2,V1).
+
+
+
+
+===== Statistics ====
+Parse time: 4.193723ms
+Convert time: 3.315713643s
+Solve time: 93.791585598s
+Output time: 32.798992ms
+Total time: 97.144291956s
+Memory:  689.2 MiB
+ILASP CPU time: 93.791585598s
+ILASP Memory: 2.6 GiB
+Universe Size: 51 literals
+Unique Predicates: 5
+
