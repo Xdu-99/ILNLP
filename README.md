@@ -26,26 +26,16 @@ chmod +x ./ILASP
  ./target/release/ilnlp  -h
 ```
 ```
-Usage: ilnlp [OPTIONS] [INPUT]
-
-Arguments:
-
-  [INPUT]  
-
+Usage: ilnlp [OPTIONS] --example <EXAMPLE>
 
 Options:
-
-  -o, --output <OUTPUT>       
-  
-      --ilasp <ILASP>            [default: ILASP]
-      
-      --template <TEMPLATE>      
-      
-      --ilasp-out <ILASP_OUT>    
-      
-  -r, --run                      
-  
-      --ilasp-args <ILASP_ARGS>  
-      
+  -e, --example <EXAMPLE>        Example file
+  -o, --output <OUTPUT>          Output file for generated ILASP-compatible input file Defaults to stdout; if empty and running ILASP, do not output
+      --background <BACKGROUND>  Background file
+      --ilasp <ILASP>            ILASP executable path, defaults to "ILASP" [default: ILASP]
+      --template <TEMPLATE>      Template file for covert to ILASP-compatible input file
+      --ilasp-out <ILASP_OUT>    Output file for ILASP execution results, defaults to stdout
+  -r, --run                      Run ILASP solver, defaults to false
+      --ilasp-args <ILASP_ARGS>  pass to ILASP
   -h, --help                     Print help
 ```
