@@ -14,13 +14,11 @@
 
 {%- endfor -%}
 
-#modeh(1, in(var(node),var(node))).
-#modeh(1, nin(var(node),var(node))).
-#modeb( nin(var(node),var(node))).
+#modeh( in(var(node),var(node))). 
+#modeb( in(var(node),var(node))). 
 #modeb( edge(var(node), var(node)), (positive)).
 #modeb( var(node) != var(node), (positive)).
+#modeb( node(var(node)), (positive)).
 #modeh( reach(var(node))).
 #modeb( reach(var(node))).
-#modeb( node(var(node)), (positive)).
-#modeb( in(var(node),var(node))).
-#modeb( initial(var(node)), (positive)).
+#modeb( initial(var(node))).
