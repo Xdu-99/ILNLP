@@ -156,7 +156,7 @@ impl Example {
         &self,
         global_literals: &LitSet,
         literals: &LitSet,
-        iltask: &mut ILTaskBuilder<Rc<Literal>, Rule>,
+        iltask: &mut ILTaskBuilder<Rc<Literal>, String>,
         builder: &LitBuilder,
     ) -> Result<(), IlnlpError> {
         let input = &self.input;
@@ -215,7 +215,7 @@ impl Example {
     pub fn compute_example(
         &self,
         global_literals: &LitSet,
-        iltask: &mut ILTaskBuilder<Rc<Literal>, Rule>,
+        iltask: &mut ILTaskBuilder<Rc<Literal>, String>,
         builder: &LitBuilder,
     ) -> Result<(), IlnlpError> {
         let output = self.output.iter().collect::<Vec<_>>();
@@ -255,7 +255,7 @@ impl Example {
 
 #[derive(Debug, Default)]
 pub struct Task {
-    background: Vec<Rule>,
+    background: Vec<String>,
     examples: Vec<Example>,
     lit_builder: LitBuilder,
 }
@@ -273,21 +273,15 @@ impl Task {
         self.examples.push(example);
     }
 
-    pub fn push_background(&mut self, rule: Rule) {
+    pub fn push_background(&mut self, rule: String) {
         self.background.push(rule);
     }
 
-    fn get_definite_rules(&self) -> Vec<&Rule> {
+    fn get_definite_rules(&self) -> Vec<&String> {
         self.background
             .iter()
             .filter(|rule| {
-                rule.body.iter().all(|literal| {
-                    if let BodyLiteral::Literal { negated, .. } = literal {
-                        !negated
-                    } else {
-                        true
-                    }
-                })
+                !rule.contains("not ")
             })
             .collect()
     }
@@ -358,7 +352,7 @@ impl Task {
         Ok(())
     }
 
-    pub fn ilas(&mut self, stat: Arc<Mutex<Stat>>) -> anyhow::Result<ILTask<Rc<Literal>, Rule>> {
+    pub fn ilas(&mut self, stat: Arc<Mutex<Stat>>) -> anyhow::Result<ILTask<Rc<Literal>, String>> {
         let mut iltask = ILTaskBuilder::default();
         self.background.iter().for_each(|r| {
             iltask.push_background(r.clone());
