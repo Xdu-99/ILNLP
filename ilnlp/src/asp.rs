@@ -6,7 +6,7 @@ use crate::{Lit, Literal, Rule, LitSet, error::IlnlpError};
 /// compute models for a given set of rules and facts 
 
 pub fn compute_models(
-    rules: &[&Rule],
+    rules: &[&String],
     facts: &LitSet,
     builder: & crate::LitBuilder,
     limit: usize,
@@ -15,7 +15,7 @@ pub fn compute_models(
     let mut program = String::new();
     let mut models = Vec::new();
     rules.iter().for_each(|rule| {
-        program.push_str(&rule.to_string());
+        program.push_str(rule);
         program.push('\n');
     });
     for lit in facts.iter() {
@@ -67,7 +67,7 @@ pub fn compute_models(
 }
 
 pub fn ground_literals(
-    rules: &[Rule],
+    rules: &[String],
     facts1: &LitSet,
     facts2: &LitSet,
     builder: & crate::LitBuilder,
@@ -77,7 +77,7 @@ pub fn ground_literals(
     let mut ctl = clingo::control(vec![])?;
     let mut program = String::new();
     rules.iter().for_each(|rule| {
-        program.push_str(&rule.to_string());
+        program.push_str(rule);
         program.push('\n');
     });
     for lit in facts1.iter() {
