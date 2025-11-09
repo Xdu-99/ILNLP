@@ -1,34 +1,49 @@
 #[global_allocator]
 static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
 
+use clap::Parser;
 use ilnlp::{ilasp::ILTask, stat::Stat};
 use std::{
     fmt::Display,
     fs::File,
     io::{BufReader, BufWriter, Read, Write, stdin, stdout},
     path::PathBuf,
-    process::{Command, Child},
+    process::{Child, Command},
     sync::{Arc, Mutex},
     time::Duration,
 };
-use tempfile::NamedTempFile;
 use sysinfo::{Pid, ProcessesToUpdate, System};
-use clap::Parser;
+use tempfile::NamedTempFile;
 
 #[derive(Parser)]
 #[command(about, long_about = None, disable_version_flag = true)]
 struct Cli {
-    input: Option<PathBuf>,
+    /// Example file
+    #[arg(short, long)]
+    example: PathBuf,
+    /// Output file for generated ILASP-compatible input file
+    /// Defaults to stdout; if empty and running ILASP, do not output
     #[arg(short, long)]
     output: Option<PathBuf>,
+
+    /// Background file
+
+    #[arg(long)]
+    background: Option<PathBuf>,
+    /// ILASP executable path, defaults to "ILASP"
+
     #[arg(long, default_value = "ILASP")]
     ilasp: PathBuf,
+    /// Template file for covert to ILASP-compatible input file
     #[arg(long)]
     template: Option<PathBuf>,
+    /// Output file for ILASP execution results, defaults to stdout
     #[arg(long)]
     ilasp_out: Option<PathBuf>,
+    /// Run ILASP solver, defaults to false
     #[arg(short, long)]
     run: bool,
+    /// pass to ILASP
     #[arg(long, action = clap::ArgAction::Append, value_parser = clap::builder::NonEmptyStringValueParser::new(), allow_hyphen_values = true)]
     ilasp_args: Vec<String>, // 直接接受完整参数，允许带连字符
 }
@@ -42,18 +57,37 @@ impl Cli {
         // eprintln!("Debug: ILASP args: {:?}", self.ilasp_args);
 
         // 验证参数
-        let valid_args = vec!["-na", "-ml=2", "--ml=2", "-v", "--quiet", "--version=1", "--version=2", "--version=2i", "--version=3", "--version=4"];
+        let valid_args = vec![
+            "-na",
+            "-ml=2",
+            "--ml=2",
+            "-v",
+            "--quiet",
+            "--version=1",
+            "--version=2",
+            "--version=2i",
+            "--version=3",
+            "--version=4",
+        ];
         let mut has_version = false;
         for arg in &self.ilasp_args {
             if arg.starts_with("--version=") || arg == "-v" {
                 has_version = true;
             }
-            if !valid_args.contains(&arg.as_str()) && !arg.starts_with("-ml=") && !arg.starts_with("--ml=") {
-                eprintln!("Warning: ILASP argument '{}' may be invalid. Check ILASP --help.", arg);
+            if !valid_args.contains(&arg.as_str())
+                && !arg.starts_with("-ml=")
+                && !arg.starts_with("--ml=")
+            {
+                eprintln!(
+                    "Warning: ILASP argument '{}' may be invalid. Check ILASP --help.",
+                    arg
+                );
             }
         }
         if !has_version {
-            eprintln!("Warning: No ILASP version specified. ILASP requires --version=[1|2|2i|3|4].");
+            eprintln!(
+                "Warning: No ILASP version specified. ILASP requires --version=[1|2|2i|3|4]."
+            );
         }
 
         // 启动 ILASP 子进程
@@ -96,7 +130,11 @@ impl Cli {
             .and_then(|line| {
                 line.split(':')
                     .last()
-                    .and_then(|s| s.trim().strip_suffix('s').and_then(|s| s.trim().parse::<f64>().ok()))
+                    .and_then(|s| {
+                        s.trim()
+                            .strip_suffix('s')
+                            .and_then(|s| s.trim().parse::<f64>().ok())
+                    })
                     .map(|t| std::time::Duration::from_secs_f64(t))
             })
             .unwrap_or(elapsed_time);
@@ -121,7 +159,8 @@ impl Cli {
         } else {
             eprintln!("{}", stderr);
             return Err(anyhow::anyhow!(
-                "ilasp execute failed {:?}", output.status.code()
+                "ilasp execute failed {:?}",
+                output.status.code()
             ));
         }
 
@@ -180,19 +219,21 @@ impl Cli {
 
             std::process::exit(-1);
         })?;
+        println!("Parsing...");
 
         let mut buf = String::new();
-        match self.input.as_ref() {
-            Some(p) => {
-                let f = File::open(p)?;
-                BufReader::new(f).read_to_string(&mut buf)?;
-            }
-            None => {
-                BufReader::new(stdin()).read_to_string(&mut buf)?;
-            }
-        }
-        println!("Parsing...");
+
+        let f = File::open(&self.example)?;
+        BufReader::new(f).read_to_string(&mut buf)?;
+
         let mut c = ilnlp::parser::parse_task(&buf)?;
+        if let Some(p) = self.background.as_ref() {
+            let f = File::open(p)?;
+            let mut buf = String::new();
+            BufReader::new(f).read_to_string(&mut buf)?;
+            let bks = ilnlp::parser::parse_background(&buf)?;
+            bks.into_iter().for_each(|rule| c.push_background(rule));
+        }
         stat.lock().unwrap().parse();
         c.check_compatibility()?;
         println!("Converting...");
