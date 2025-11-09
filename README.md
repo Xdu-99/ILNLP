@@ -19,7 +19,7 @@ chmod +x ./ILASP
 
 #run
 ```
-./target/release/ilnlp -r --output PATH_LAS_FILE --template PATH_DECLARATION_FILE --ilasp ./ILASP --ilasp-args --version=4 --ilasp-args -na PATH_TASK_FILE
+./target/release/ilnlp -r --ilasp-out="PATH_RESULT_FILE" --output="PATH_LAS_FILE" --background="PATH_Background_FILE" --template="PATH_DECLARATION_FILE" --example="PATH_TASK_FILE" --ilasp ./ILASP --ilasp-args --version=4 
 ```
 #the help of ilnlp
 ```
