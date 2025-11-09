@@ -1,6 +1,0 @@
-has_number(R,C) :- cell(R,C,_).
-:-row(R), col(C), not has_number(R,C).
-:-cell(R1,C1,N), cell(R2,C2,N), R1!=R2,block(B,R1,C1), block(B,R2,C2), num(N).
-
-I:num(1) num(2) col(1) col(2) row(1) row(2) block(1,1,1) block(1,1,2) block(2,2,1) block(2,2,2) 
-O:{num(1) num(2) col(1) col(2) row(1) row(2) block(2,2,1) block(2,2,2) block(1,1,1) block(1,1,2) cell(1,1,1) no_cell(2,1,1) no_cell(1,2,1) cell(2,2,1) no_cell(1,1,2) cell(2,1,2) cell(1,2,2) no_cell(2,2,2) has_number(1,1) has_number(2,1) has_number(1,2) has_number(2,2)} {num(1) num(2) col(1) col(2) row(1) row(2) block(2,2,1) block(2,2,2) block(1,1,1) block(1,1,2) no_cell(1,1,1) cell(2,1,1) cell(1,2,1) no_cell(2,2,1) cell(1,1,2) no_cell(2,1,2) no_cell(1,2,2) cell(2,2,2) has_number(1,1) has_number(2,1) has_number(1,2) has_number(2,2)}

@@ -1,4 +1,0 @@
-:- edge(X,Y), not match(X,_), not match(_,Y).
-
-I: edge(1,a) edge(1,d) edge(2,b) edge(3,c) edge(4,a) edge(4,d)
-O:{edge(1,a) edge(1,d) edge(2,b) edge(3,c) edge(4,a) edge(4,d) match(2,b) match(3,c) match(1,a) not_match(1,d) not_match(4,a) match(4,d)} {edge(1,a) edge(1,d) edge(2,b) edge(3,c) edge(4,a) edge(4,d) match(2,b) match(3,c) not_match(1,a) match(1,d) match(4,a) not_match(4,d)}

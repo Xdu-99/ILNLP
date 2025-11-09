@@ -1,4 +1,0 @@
-:-row(R),not queen(R,_).
-
-I: column(1) column(2) column(3) column(4) column(5) column(6) row(1) row(2) row(3) row(4) row(5) row(6)
-O: {column(1) column(2) column(3) column(4) column(5) column(6) row(1) row(2) row(3) row(4) row(5) row(6) queen(3,1) queen(6,2) queen(2,3) queen(5,4) queen(1,5) queen(4,6)} {column(1) column(2) column(3) column(4) column(5) column(6) row(1) row(2) row(3) row(4) row(5) row(6) queen(2,1) queen(4,2) queen(6,3) queen(1,4) queen(3,5) queen(5,6)} {column(1) column(2) column(3) column(4) column(5) column(6) row(1) row(2) row(3) row(4) row(5) row(6) queen(4,1) queen(1,2) queen(5,3) queen(2,4) queen(6,5) queen(3,6)} {column(1) column(2) column(3) column(4) column(5) column(6) row(1) row(2) row(3) row(4) row(5) row(6) queen(5,1) queen(3,2) queen(1,3) queen(6,4) queen(4,5) queen(2,6)}

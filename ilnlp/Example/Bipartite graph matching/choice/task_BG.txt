@@ -1,6 +1,0 @@
-:-match(X,Y1), match(X,Y2), Y1!=Y2.
-:-match(X1,Y), match(X2,Y), X1!=X2.
-:- edge(X,Y), not match(X,_), not match(_,Y).
-
-I: edge(1, a) edge(2, a) edge(3, a) edge(4, a) edge(1, b)
-O:{edge(1,a) edge(2,a) edge(3,a) edge(4,a) edge(1,b) match(1,a)} {edge(1,a) edge(2,a) edge(3,a) edge(4,a) edge(1,b) match(1,b)} {edge(1,a) edge(2,a) edge(3,a) edge(4,a) edge(1,b) match(4,a) match(1,b)} {edge(1,a) edge(2,a) edge(3,a) edge(4,a) edge(1,b) match(3,a) match(1,b)}
