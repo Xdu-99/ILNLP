@@ -1,12 +1,10 @@
-use std::{cell::RefCell,  rc::Rc};
+use std::{cell::RefCell, rc::Rc};
 
 use nom::{
     IResult, Parser,
     branch::alt,
     bytes::complete::{tag, take_while},
-    character::complete::{
-         digit1, multispace0, multispace1, one_of,
-    },
+    character::complete::{digit1, multispace0, multispace1, one_of},
     combinator::{map, opt, recognize},
     multi::{many0, separated_list0, separated_list1},
     sequence::{delimited, preceded},
@@ -23,7 +21,9 @@ fn parse_variable(input: Span) -> IResult<Span, String> {
     let identifier = recognize((
         take_while(|c: char| c == '_'),
         one_of("ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
-        take_while(|c: char| c.is_ascii_alphanumeric() || c == '_' || c == '+' || c == '-' || c == '\''),
+        take_while(|c: char| {
+            c.is_ascii_alphanumeric() || c == '_' || c == '+' || c == '-' || c == '\''
+        }),
     ));
 
     map(identifier, |s: Span| s.to_string()).parse(input)
@@ -64,67 +64,9 @@ fn parse_term(input: Span) -> IResult<Span, Literal> {
     Ok((input, Literal::new(predicate, args.unwrap_or_default())))
 }
 
-
-fn parse_comparison(input: Span) -> IResult<Span, BodyLiteral> {
-    let (input, left) = preceded(multispace0, alt((parse_variable, parse_integer))).parse(input)?;
-    let (input, op) = preceded(multispace0, alt((tag("!="), tag(">"), tag("<"), tag("=")))).parse(input)?;
-    let (input, right) =
-        preceded(multispace0, alt((parse_variable, parse_integer))).parse(input)?;
-    let comparison = match op.trim() {
-        "!=" => Comparison::NotEqual(left, right),
-        ">" => Comparison::Greater(left, right),
-        "<" => Comparison::Less(left, right),
-        "=" => Comparison::Equal(left, right),
-        _ => unreachable!(),
-    };
-    Ok((input, BodyLiteral::Comparison(comparison)))
-}
-
-fn parse_body_literal(input: Span) -> IResult<Span, BodyLiteral> {
-    alt((
-        map(
-            (opt(preceded(multispace0, tag("not "))), parse_term),
-            |(not, term)| BodyLiteral::Literal {
-                literal: term,
-                negated: not.is_some(),
-            },
-        ),
-        parse_comparison,
-    ))
-    .parse(input)
-}
-
-//  :- p(X), not q(Y), X!=Y.
-fn parse_rule(input: Span) -> IResult<Span, ()> {
-    let (input, head) = opt(parse_term).parse(input)?;
-    let (input, imp) = preceded(multispace0, opt(tag(":-"))).parse(input)?;
-
-    if imp.is_none() {
-        // check fact
-        let head = head.ok_or_else(||nom::Err::Error(nom::error::Error::new(input.clone(), nom::error::ErrorKind::Verify)))?;
-        
-        let (input, _) = preceded(multispace0, tag(".")).parse(input)?;
-        
-        let task = input.extra.clone();
-        task.borrow_mut().push_background(Rule { head: Some(head), body: vec![] });
-        Ok((input, ()))
-    } else {
-        // parse body
-        let (input, body) = separated_list1(
-            (multispace0, tag(","), multispace0), 
-            parse_body_literal
-        ).parse(input)?;
-        
-        let (input, _) = preceded(multispace0, tag(".")).parse(input)?;
-        
-        let task = input.extra.clone();
-        task.borrow_mut().push_background(Rule { head, body });
-        Ok((input, ()))
-    }
-}
-
 fn parse_lit(input: Span) -> IResult<Span, Lit> {
     let (input, term) = parse_term(input)?;
+
     // let task = input.extra.clone();
     // let lit = task.borrow().create_literal(term);
     let task = input.extra.clone();
@@ -133,8 +75,8 @@ fn parse_lit(input: Span) -> IResult<Span, Lit> {
     Ok((input, lit))
 }
 
-
 fn parse_answer_set(input: Span) -> IResult<Span, LitSet> {
+    let f = input.fragment();
     let (input, terms) = delimited(
         (multispace0, tag("{"), multispace0),
         separated_list0((multispace0,), parse_lit),
@@ -144,18 +86,29 @@ fn parse_answer_set(input: Span) -> IResult<Span, LitSet> {
     Ok((input, LitSet::new(terms)))
 }
 
-
 fn parse_example(input: Span) -> IResult<Span, ()> {
+    let mut input = input;
+    loop {
+        let (i, is_com) = parse_ignore(input)?;
+        input = i;
+        if !is_com {
+            break;
+        }
+    }
     let (input, facts) = preceded(
         (multispace0, tag("I:"), multispace0),
         separated_list0(multispace1, parse_lit),
     )
     .parse(input)?;
-    let (input, outputs) = preceded(
+    let (input, _) = preceded(multispace0, tag(".")).parse(input)?;
+    let (input, mut outputs) = preceded(
         (multispace0, tag("O:"), multispace0),
         separated_list0(multispace1, parse_answer_set),
     )
     .parse(input)?;
+    for o in outputs.iter_mut() {
+        o.extend(facts.iter().cloned());
+    }
     let task = input.extra.clone();
     let mut task = task.borrow_mut();
     task.push_example(Example {
@@ -167,31 +120,30 @@ fn parse_example(input: Span) -> IResult<Span, ()> {
 }
 
 fn parse_examples(input: Span) -> IResult<Span, ()> {
-    let (input, _) = many0(preceded(parse_ignore, parse_example)).parse(input)?;
+    let (input, _) = many0(parse_example).parse(input)?;
     let (input, _) = parse_ignore(input)?;
     Ok((input, ()))
 }
 
-fn parse_background(input: Span) -> IResult<Span, ()> {
-    let (input, _) = many0(preceded(parse_ignore, parse_rule)).parse(input)?;
-    let (input, _) = parse_ignore(input)?;
-    Ok((input, ()))
-}
+
 
 pub fn parse_input(input: Span) -> IResult<Span, ()> {
-    let (input, _) = parse_background(input)?;
+    // let (input, _) = parse_background(input)?;
     let (input, _) = parse_examples(input)?;
     Ok((input, ()))
 }
-pub fn parse_ignore(input: Span) -> IResult<Span, ()> {
+pub fn parse_ignore(input: Span) -> IResult<Span, bool> {
     let (input, _) = multispace0(input)?;
+
     let (i, is_comment) = opt(tag("%")).parse(input.clone())?;
     if is_comment.is_some() {
         let (input, _) = take_while(|c: char| c != '\n' && c != '\r')(i)?;
         let (input, _) = multispace0(input)?;
-        return Ok((input, ()));
+        return Ok((input, true));
     }
-    Ok((input, ()))
+
+
+    Ok((input, false))
 }
 /// Parse a task
 pub fn parse_task(input: &str) -> Result<Task, IlnlpError> {
@@ -219,4 +171,19 @@ pub fn parse_task(input: &str) -> Result<Task, IlnlpError> {
     }
     let c = task.take();
     Ok(c)
+}
+
+pub fn parse_background(input: &str) -> Result<Vec<String>, IlnlpError> {
+    let mut backgrounds = Vec::new();
+    for line in input.lines() {
+        match line.strip_prefix(" ") {
+            Some(l) => {
+                if !l.starts_with("%") && !l.is_empty() {
+                    backgrounds.push(l.to_string());
+                }
+            }
+            None => {}
+        }
+    }
+    Ok(backgrounds)
 }
