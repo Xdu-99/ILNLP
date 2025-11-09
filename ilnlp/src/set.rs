@@ -13,6 +13,14 @@ impl<T: Ord + Clone> FromIterator<T> for Set<T> {
     }
 }
 
+impl<T: Ord + Clone> Extend<T> for Set<T>  {
+    fn extend<I: IntoIterator<Item = T>>(&mut self, iter: I) {
+        self.inner.extend(iter);
+        self.rebuild();
+
+    }
+}
+
 
 impl<T: Ord + Clone> Set<T> {
     pub fn new(data: Vec<T>) -> Set<T> {
